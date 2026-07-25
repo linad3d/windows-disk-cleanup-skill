@@ -162,6 +162,7 @@ IDE or terminal.
 | File | What is in it |
 |---|---|
 | [SKILL.md](skills/windows-disk-cleanup/SKILL.md) | The workflow Claude follows |
+| [evals/README.md](skills/windows-disk-cleanup/evals/README.md) | Trigger evaluation: 100% accuracy over 19 scored queries, and why the bundled harness could not be used |
 | [app-cache-atlas.md](skills/windows-disk-cleanup/references/app-cache-atlas.md) | Per-application: what is safe to delete, what must stay |
 | [relocation-methods.md](skills/windows-disk-cleanup/references/relocation-methods.md) | App setting vs environment variable vs junction |
 | [windows-pitfalls.md](skills/windows-disk-cleanup/references/windows-pitfalls.md) | PowerShell, encoding, robocopy, locking gotchas |

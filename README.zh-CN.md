@@ -141,6 +141,7 @@ Windows PowerShell 5.1 会把不带 BOM 的 UTF-8 文件当 ANSI 读。注释里
 | 文件 | 内容 |
 |---|---|
 | [SKILL.md](skills/windows-disk-cleanup/SKILL.md) | Claude 遵循的工作流 |
+| [evals/README.md](skills/windows-disk-cleanup/evals/README.md) | 触发测试：19 条计分查询全对，以及为何官方 harness 在 Windows 上不可用 |
 | [app-cache-atlas.md](skills/windows-disk-cleanup/references/app-cache-atlas.md) | 逐应用：哪些能删、哪些必须留 |
 | [relocation-methods.md](skills/windows-disk-cleanup/references/relocation-methods.md) | 应用设置 vs 环境变量 vs junction |
 | [windows-pitfalls.md](skills/windows-disk-cleanup/references/windows-pitfalls.md) | PowerShell、编码、robocopy、文件占用的坑 |
