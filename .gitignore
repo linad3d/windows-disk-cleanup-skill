@@ -1,0 +1,16 @@
+# Eval and test artifacts
+evals-run.log
+**/evals/trigger-results.json
+**/evals/trigger-report.html
+*-workspace/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Local scratch
+*.tmp
+*.bak

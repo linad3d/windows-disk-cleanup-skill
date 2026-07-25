@@ -1,0 +1,82 @@
+[
+  {
+    "query": "我 C 盘又爆红了，只剩 8 个 G 了，你帮我看看到底是什么东西占的，能清就清一下，但是别把我的聊天记录搞没了",
+    "should_trigger": true
+  },
+  {
+    "query": "my windows machine says low disk space on C:, AppData is like 70gb somehow. can you figure out what's in there and get me some space back",
+    "should_trigger": true
+  },
+  {
+    "query": "飞书这个客户端在C盘占了十几个G，有没有办法让它把缓存放到D盘去？我D盘还有一百多G空着",
+    "should_trigger": true
+  },
+  {
+    "query": "I want to move my .nuget packages folder and the playwright browsers off my system drive to E: without breaking dotnet or my test suite",
+    "should_trigger": true
+  },
+  {
+    "query": "unreal keeps filling up my ssd with derived data cache, is there a way to point the DDC and zen store at a different drive",
+    "should_trigger": true
+  },
+  {
+    "query": "ok so windows update failed saying not enough space, and now chrome is acting weird and lost some history. c drive is at 2gb free. help",
+    "should_trigger": true
+  },
+  {
+    "query": "whats eating all the space on my system drive? i've got like 400gb of stuff on a 500gb nvme and i genuinely dont know where it went",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我把 C:\\Users\\me\\AppData\\Roaming 下面那几个特别大的文件夹用软链接挪到 D 盘，程序不能出问题",
+    "should_trigger": true
+  },
+  {
+    "query": "is it safe to delete the Service Worker folder in an electron app's appdata? trying to reclaim space but i dont want to get logged out",
+    "should_trigger": true
+  },
+  {
+    "query": "my C: partition is 98% full on this windows 11 box. i do unreal dev and have jetbrains + nvidia stuff installed. want a plan before i start deleting things",
+    "should_trigger": true
+  },
+  {
+    "query": "docker is using 60gb, can you prune the images and dangling volumes for me",
+    "should_trigger": false
+  },
+  {
+    "query": "I think my SSD is failing, CrystalDiskInfo shows reallocated sectors and I'm getting I/O errors. should I RMA it?",
+    "should_trigger": false
+  },
+  {
+    "query": "need to free up space on my iphone, photos are taking 80gb and icloud says its full",
+    "should_trigger": false
+  },
+  {
+    "query": "our S3 bucket costs are out of control, help me set up a lifecycle policy to move old objects to glacier",
+    "should_trigger": false
+  },
+  {
+    "query": "how do I partition this new 4tb drive and format it, should I use GPT or MBR",
+    "should_trigger": false
+  },
+  {
+    "query": "git repo is 3gb because someone committed a bunch of binaries years ago, can we rewrite history with filter-repo to shrink the clone",
+    "should_trigger": false
+  },
+  {
+    "query": "写个 PowerShell 脚本，把这个目录下所有的 .log 文件按日期归档到子文件夹里",
+    "should_trigger": false
+  },
+  {
+    "query": "postgres data directory keeps growing, i think autovacuum isnt keeping up with the bloat on this table",
+    "should_trigger": false
+  },
+  {
+    "query": "我想给我的笔记本加一块固态硬盘，然后把系统迁移过去，有什么推荐的克隆软件吗",
+    "should_trigger": false
+  },
+  {
+    "query": "node_modules in this monorepo is 4gb, is there a way to use pnpm workspaces to dedupe it",
+    "should_trigger": false
+  }
+]
