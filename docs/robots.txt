@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://linad3d.github.io/windows-disk-cleanup-skill/sitemap.xml
+Sitemap: https://linad3d.github.io/drivekeeper/sitemap.xml

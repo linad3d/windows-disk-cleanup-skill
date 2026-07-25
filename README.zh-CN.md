@@ -1,12 +1,12 @@
-# Windows C 盘清理技能
+# C盘清理大师 · DriveKeeper
 
-**清理工具删完就长回来。这个把该映射的映射掉，所以不会。**
+**清理工具删完就长回来。DriveKeeper 把该映射的映射掉，所以不会。**
 
 一个 Claude Code 技能 + 独立可用的 PowerShell 工具包：先把爆满的 C 盘救回来，再用 NTFS
 目录连接（junction）和环境变量，把那些**反复回涨**的目录搬到别的盘。应用还往原来的路径写，
 字节落在别处。
 
-[English](README.md) · [文档站](https://linad3d.github.io/windows-disk-cleanup-skill/)
+[English](README.md) · [文档站](https://linad3d.github.io/drivekeeper/)
 
 ---
 
@@ -30,7 +30,7 @@ junction 是文件系统层的透明重定向，应用打开的还是它一直�
 
 ## 和现有工具比
 
-| | 360安全卫士 / QQ电脑管家 | CCleaner / Windows 存储感知 | 本技能 |
+| | 360安全卫士 / QQ电脑管家 | CCleaner / Windows 存储感知 | **DriveKeeper** |
 |---|---|---|---|
 | 一键清垃圾 | 有 | 有 | 有 —— 白名单，**默认干跑** |
 | 用符号链接搬家 | 有（C盘搬家） | 无 | 有 |
@@ -80,8 +80,8 @@ junction 是文件系统层的透明重定向，应用打开的还是它一直�
 ## 安装
 
 ```powershell
-git clone https://github.com/linad3d/windows-disk-cleanup-skill.git
-Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"
+git clone https://github.com/linad3d/drivekeeper.git
+Copy-Item -Recurse drivekeeper\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"
 ```
 
 然后直接说人话：

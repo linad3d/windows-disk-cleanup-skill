@@ -1,13 +1,16 @@
-# Windows Disk Cleanup Skill
+# DriveKeeper · C盘清理大师
 
-**Cleaners delete. The space comes back. This maps it away, so it doesn't.**
+**Free your C: drive — and keep it free.**
+
+Cleaners delete, and the space comes back in about two weeks. DriveKeeper maps it away,
+so it doesn't.
 
 A Claude Code skill and standalone PowerShell toolkit that frees a full Windows C: drive
 and then keeps it free — by relocating the directories that actually regrow onto another
 drive with NTFS junctions and environment variables. Applications keep writing to the
 same path; the bytes land somewhere else.
 
-[中文文档](README.zh-CN.md) · [Documentation site](https://linad3d.github.io/windows-disk-cleanup-skill/)
+[中文文档](README.zh-CN.md) · [Documentation site](https://linad3d.github.io/drivekeeper/)
 
 ---
 
@@ -34,7 +37,7 @@ and never learns that its data now lives on another volume.
 
 ## How it compares
 
-| | 360 / Tencent PC suites | CCleaner / Storage Sense | This skill |
+| | 360 / Tencent PC suites | CCleaner / Storage Sense | **DriveKeeper** |
 |---|---|---|---|
 | One-click junk cleanup | Yes | Yes | Yes — allowlist, **dry-run by default** |
 | Relocates with junctions | Yes (their "move from C:" feature) | No | Yes |
@@ -92,15 +95,15 @@ of exactly these distinctions.
 ## Install
 
 ```bash
-git clone https://github.com/linad3d/windows-disk-cleanup-skill.git
-cp -r windows-disk-cleanup-skill/skills/windows-disk-cleanup ~/.claude/skills/
+git clone https://github.com/linad3d/drivekeeper.git
+cp -r drivekeeper/skills/windows-disk-cleanup ~/.claude/skills/
 ```
 
 On Windows PowerShell:
 
 ```powershell
-git clone https://github.com/linad3d/windows-disk-cleanup-skill.git
-Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"
+git clone https://github.com/linad3d/drivekeeper.git
+Copy-Item -Recurse drivekeeper\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"
 ```
 
 Then describe the problem:

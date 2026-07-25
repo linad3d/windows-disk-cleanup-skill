@@ -4,23 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Windows Disk Cleanup Skill — Free Your C: Drive, and Keep It Free</title>
+<title>DriveKeeper — Windows Disk Cleanup That Stays Clean | C盘清理大师</title>
 <meta name="description" content="Cleaners delete and the space comes back. This open-source Claude Code skill and PowerShell toolkit relocates the caches that actually regrow onto another drive with NTFS junctions. Measured: 11.25 GB crawled back onto C: in 13 days after a delete-only clean, while 5.76 GB of new relocated cache landed elsewhere.">
-<link rel="canonical" href="https://linad3d.github.io/windows-disk-cleanup-skill/">
-<link rel="alternate" hreflang="en" href="https://linad3d.github.io/windows-disk-cleanup-skill/">
-<link rel="alternate" hreflang="zh-Hans" href="https://linad3d.github.io/windows-disk-cleanup-skill/#zh">
-<link rel="alternate" hreflang="x-default" href="https://linad3d.github.io/windows-disk-cleanup-skill/">
+<link rel="canonical" href="https://linad3d.github.io/drivekeeper/">
+<link rel="alternate" hreflang="en" href="https://linad3d.github.io/drivekeeper/">
+<link rel="alternate" hreflang="zh-Hans" href="https://linad3d.github.io/drivekeeper/#zh">
+<link rel="alternate" hreflang="x-default" href="https://linad3d.github.io/drivekeeper/">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Windows Disk Cleanup Skill">
-<meta property="og:title" content="Free your C: drive — and keep it free">
+<meta property="og:site_name" content="DriveKeeper">
+<meta property="og:title" content="DriveKeeper — free your C: drive, and keep it free">
 <meta property="og:description" content="Cleaners delete; the space comes back in about two weeks. This maps the growing caches onto another drive with NTFS junctions, so it doesn't. Open source, no ads, no background service.">
-<meta property="og:url" content="https://linad3d.github.io/windows-disk-cleanup-skill/">
+<meta property="og:url" content="https://linad3d.github.io/drivekeeper/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Free your C: drive — and keep it free">
+<meta name="twitter:title" content="DriveKeeper — free your C: drive, and keep it free">
 <meta name="twitter:description" content="A delete-only cleanup is undone in two weeks (measured: 0.87 GB/day). Relocation with NTFS junctions makes it permanent. Open source Claude Code skill + PowerShell toolkit.">
 
-<meta name="keywords" content="windows disk cleanup, C drive full, free up disk space windows, move AppData to another drive, NTFS junction, mklink, C盘清理, C盘满了, C盘搬家, claude code skill, powershell disk cleanup, 360 alternative">
+<meta name="keywords" content="drivekeeper, C盘清理大师, windows disk cleanup, C drive full, free up disk space windows, move AppData to another drive, NTFS junction, mklink, C盘清理, C盘满了, C盘搬家, claude code skill, powershell disk cleanup, 360 alternative">
 <meta name="author" content="linad3d">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 
@@ -30,14 +30,15 @@
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      "@id": "https://linad3d.github.io/windows-disk-cleanup-skill/#app",
-      "name": "Windows Disk Cleanup Skill",
+      "@id": "https://linad3d.github.io/drivekeeper/#app",
+      "name": "DriveKeeper",
+      "alternateName": "C盘清理大师",
       "applicationCategory": "UtilitiesApplication",
       "applicationSubCategory": "Disk Cleanup",
       "operatingSystem": "Windows 10, Windows 11",
       "softwareRequirements": "PowerShell 5.1 or later; NTFS volumes",
-      "url": "https://linad3d.github.io/windows-disk-cleanup-skill/",
-      "codeRepository": "https://github.com/linad3d/windows-disk-cleanup-skill",
+      "url": "https://linad3d.github.io/drivekeeper/",
+      "codeRepository": "https://github.com/linad3d/drivekeeper",
       "license": "https://opensource.org/licenses/MIT",
       "author": { "@type": "Person", "name": "linad3d" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -53,7 +54,7 @@
     },
     {
       "@type": "HowTo",
-      "@id": "https://linad3d.github.io/windows-disk-cleanup-skill/#howto",
+      "@id": "https://linad3d.github.io/drivekeeper/#howto",
       "name": "How to move an application cache off the C: drive permanently",
       "description": "The relocation sequence that is safe to interrupt at any point, because the original data stays intact until a byte-level verification passes. After it completes, the application's future cache growth lands on the destination drive rather than the system drive.",
       "totalTime": "PT25M",
@@ -103,7 +104,7 @@
     },
     {
       "@type": "FAQPage",
-      "@id": "https://linad3d.github.io/windows-disk-cleanup-skill/#faq",
+      "@id": "https://linad3d.github.io/drivekeeper/#faq",
       "mainEntity": [
         {
           "@type": "Question",
@@ -237,7 +238,9 @@
   pre code { background: none; padding: 0; }
 
   header { border-bottom: 1px solid var(--line); padding: 56px 0 40px; }
-  h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.18; margin: 0 0 16px; letter-spacing: -.02em; }
+  h1 { font-size: clamp(2.1rem, 5.5vw, 2.9rem); line-height: 1.12; margin: 0 0 6px; letter-spacing: -.03em; }
+  .zh-name { font-size: .42em; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-left: .7em; white-space: nowrap; }
+  .hero-sub { font-size: 1.28rem; font-weight: 600; margin: 0 0 14px; letter-spacing: -.01em; }
   .tagline { font-size: 1.13rem; color: var(--muted); margin: 0 0 26px; max-width: 64ch; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
   .btn {
@@ -300,15 +303,16 @@
 
 <header>
   <div class="wrap">
-    <h1>Free your C: drive — and keep it free</h1>
+    <h1>DriveKeeper<span class="zh-name">C盘清理大师</span></h1>
+    <p class="hero-sub">Free your C: drive — and keep it free.</p>
     <p class="tagline">
-      Cleaners delete, and the space comes back in about two weeks. This one relocates the
+      Cleaners delete, and the space comes back in about two weeks. DriveKeeper relocates the
       directories that actually regrow onto another drive with NTFS junctions, so the
       application keeps writing to the same path and the bytes land somewhere else.
       Open source, no ads, no background service.
     </p>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/linad3d/windows-disk-cleanup-skill">View on GitHub</a>
+      <a class="btn btn-primary" href="https://github.com/linad3d/drivekeeper">View on GitHub</a>
       <a class="btn btn-ghost" href="#proof">The evidence</a>
       <a class="btn btn-ghost" href="#compare">vs other cleaners</a>
       <a class="btn btn-ghost" href="#zh">中文</a>
@@ -372,7 +376,7 @@
     <div class="scroll">
       <table>
         <thead>
-          <tr><th></th><th>360 / Tencent PC suites</th><th>CCleaner / Storage Sense</th><th>This skill</th></tr>
+          <tr><th></th><th>360 / Tencent PC suites</th><th>CCleaner / Storage Sense</th><th>DriveKeeper</th></tr>
         </thead>
         <tbody>
           <tr><td>One-click junk cleanup</td><td>Yes</td><td>Yes</td><td>Yes — allowlist, <b>dry-run by default</b></td></tr>
@@ -444,8 +448,8 @@
 <section id="install">
   <div class="wrap">
     <h2>Install</h2>
-    <pre><code>git clone https://github.com/linad3d/windows-disk-cleanup-skill.git
-Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"</code></pre>
+    <pre><code>git clone https://github.com/linad3d/drivekeeper.git
+Copy-Item -Recurse drivekeeper\skills\windows-disk-cleanup "$env:USERPROFILE\.claude\skills\"</code></pre>
     <p>Then describe the problem in plain language:</p>
     <pre><code>my C drive is down to 8GB, figure out what's eating it and clean up what's safe</code></pre>
     <h3>Or run the scripts without Claude</h3>
@@ -536,7 +540,7 @@ Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:
       5 项迁移），释放 43.7 GB，零数据丢失。一次性投入。
     </p>
     <p>
-      <a href="https://github.com/linad3d/windows-disk-cleanup-skill/blob/main/README.zh-CN.md">完整中文文档 →</a>
+      <a href="https://github.com/linad3d/drivekeeper/blob/main/README.zh-CN.md">完整中文文档 →</a>
     </p>
   </div>
 </section>
@@ -547,8 +551,8 @@ Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:
   <div class="wrap">
     <p>
       MIT licensed ·
-      <a href="https://github.com/linad3d/windows-disk-cleanup-skill">GitHub</a> ·
-      <a href="https://github.com/linad3d/windows-disk-cleanup-skill/blob/main/README.zh-CN.md">中文</a> ·
+      <a href="https://github.com/linad3d/drivekeeper">GitHub</a> ·
+      <a href="https://github.com/linad3d/drivekeeper/blob/main/README.zh-CN.md">中文</a> ·
       Built for <a href="https://claude.com/claude-code">Claude Code</a>, works standalone.
     </p>
     <p style="font-size:.85rem;">
