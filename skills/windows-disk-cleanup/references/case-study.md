@@ -119,6 +119,47 @@ which is why the "measure what was actually freed" habit matters.
 Four junctions and two environment variables now keep the largest recurring consumers
 off the system drive permanently.
 
+## 13 days later: did it hold?
+
+The same machine, re-measured 13 days after the run. This is the part that matters -
+recovering space once is easy, and the question is whether it stays recovered.
+
+**Relocated (junction or environment variable pointing at the second drive)**
+
+| Item | At migration | 13 days later | Growth landed on |
+|---|---|---|---|
+| Chat client data | 3.69 GB | **9.45 GB** | Second drive (+5.76 GB) |
+| Agent session transcripts | 16.18 GB | 16.19 GB | Second drive |
+| Engine DDC + content store | 1.24 GB | 0.79 GB | Second drive (store self-pruned) |
+| Package + browser caches | 6.71 GB | 6.71 GB | Second drive |
+| **Net change** | | **+5.32 GB** | **Zero bytes on C:** |
+
+**Deleted only (no relocation)**
+
+| Item | After cleanup | 13 days later | |
+|---|---|---|---|
+| `%LOCALAPPDATA%\Temp` | 0 | **10.94 GB** | Back on C: |
+| GPU shader cache | 0 | 0.31 GB | Back on C: |
+| **Total** | | **11.25 GB** | **All on C:** |
+
+**11.25 GB crawled back onto C: in 13 days - about 0.87 GB/day.** At that rate a
+delete-only cleanup is fully undone in roughly two weeks, which matches the common
+experience of running a cleaner, feeling relieved, and being back where you started
+by the end of the month.
+
+The relocated set grew by a comparable amount over the same period and none of it
+touched C:. The chat client alone regenerated 5.76 GB of cache - almost exactly the
+6.7 GB that had been deleted from it during the run - except this time it went to the
+second drive, because the junction was in place.
+
+The system drive was at 62.7 GB free immediately after the run and **61.4 GB free 13
+days later**: a net loss of 1.3 GB rather than the ~11 GB that would have accumulated
+had nothing been relocated.
+
+**The conclusion to carry forward:** deletion buys weeks; relocation is what makes the
+result permanent. When an item is both large and certain to regrow, relocating it is
+worth more than deleting it even when deleting is faster right now.
+
 ## Post-run record
 
 Leave the user with an explicit record, because a junction is invisible six months

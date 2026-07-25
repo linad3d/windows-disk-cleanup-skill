@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Windows Disk Cleanup Skill — Free Up a Full C: Drive Without Losing Data</title>
-<meta name="description" content="Open-source Claude Code skill and PowerShell toolkit that frees a full Windows C: drive safely: scans real disk usage, deletes only regenerable caches from an allowlist, and relocates the rest to another drive with NTFS junctions. Recovered 43.7 GB in one verified run.">
+<title>Windows Disk Cleanup Skill — Free Your C: Drive, and Keep It Free</title>
+<meta name="description" content="Cleaners delete and the space comes back. This open-source Claude Code skill and PowerShell toolkit relocates the caches that actually regrow onto another drive with NTFS junctions. Measured: 11.25 GB crawled back onto C: in 13 days after a delete-only clean, while 5.76 GB of new relocated cache landed elsewhere.">
 <link rel="canonical" href="https://linad3d.github.io/windows-disk-cleanup-skill/">
 <link rel="alternate" hreflang="en" href="https://linad3d.github.io/windows-disk-cleanup-skill/">
 <link rel="alternate" hreflang="zh-Hans" href="https://linad3d.github.io/windows-disk-cleanup-skill/#zh">
@@ -13,14 +13,14 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Windows Disk Cleanup Skill">
-<meta property="og:title" content="Free up a full Windows C: drive without losing data">
-<meta property="og:description" content="Scans what is actually eating space, deletes only regenerable caches, and relocates the rest to another drive with NTFS junctions. 43.7 GB recovered in one verified run, zero data loss.">
+<meta property="og:title" content="Free your C: drive — and keep it free">
+<meta property="og:description" content="Cleaners delete; the space comes back in about two weeks. This maps the growing caches onto another drive with NTFS junctions, so it doesn't. Open source, no ads, no background service.">
 <meta property="og:url" content="https://linad3d.github.io/windows-disk-cleanup-skill/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Free up a full Windows C: drive without losing data">
-<meta name="twitter:description" content="A Claude Code skill and PowerShell toolkit. Allowlist deletion, dry-run by default, byte-verified relocation via NTFS junctions.">
+<meta name="twitter:title" content="Free your C: drive — and keep it free">
+<meta name="twitter:description" content="A delete-only cleanup is undone in two weeks (measured: 0.87 GB/day). Relocation with NTFS junctions makes it permanent. Open source Claude Code skill + PowerShell toolkit.">
 
-<meta name="keywords" content="windows disk cleanup, C drive full, free up disk space windows, move AppData to another drive, NTFS junction, mklink, C盘清理, C盘满了, claude code skill, powershell disk cleanup">
+<meta name="keywords" content="windows disk cleanup, C drive full, free up disk space windows, move AppData to another drive, NTFS junction, mklink, C盘清理, C盘满了, C盘搬家, claude code skill, powershell disk cleanup, 360 alternative">
 <meta name="author" content="linad3d">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 
@@ -41,21 +41,22 @@
       "license": "https://opensource.org/licenses/MIT",
       "author": { "@type": "Person", "name": "linad3d" },
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": "A Claude Code skill and standalone PowerShell toolkit that frees space on a full Windows system drive without deleting user data. It measures real directory sizes, deletes only allowlisted regenerable caches, and relocates valuable data to another drive using NTFS junctions and environment variables, with byte-level verification before any source is removed.",
+      "description": "An open-source Claude Code skill and standalone PowerShell toolkit that frees a full Windows system drive and keeps it free. It deletes only allowlisted regenerable caches, then relocates the directories that regrow onto another drive using NTFS junctions and environment variables, with byte-level verification before any source is deleted. Unlike PC-suite cleanup tools it relocates any directory the user chooses rather than a vendor-maintained software list, and it runs and exits with no background service, advertising, or bundled software.",
       "featureList": [
-        "Reparse-point-aware disk usage scanner",
+        "Relocates any directory the user names, not a fixed vendor list",
+        "NTFS junction and environment variable relocation so cache growth lands off the system drive",
         "Allowlist-only cache deletion, dry-run by default",
-        "Byte-and-file-count verified relocation via NTFS junctions",
-        "Per-application safe/unsafe cache subdirectory atlas",
-        "Junction and environment variable verification"
+        "Byte-and-file-count verification before any source is deleted",
+        "Per-application safe/unsafe cache subdirectory atlas covering 30+ applications",
+        "No background service, no advertising, no bundled software"
       ]
     },
     {
       "@type": "HowTo",
       "@id": "https://linad3d.github.io/windows-disk-cleanup-skill/#howto",
-      "name": "How to move an application cache off the C: drive safely",
-      "description": "The relocation sequence that is safe to interrupt at any point, because the original data stays intact until a byte-level verification passes.",
-      "totalTime": "PT20M",
+      "name": "How to move an application cache off the C: drive permanently",
+      "description": "The relocation sequence that is safe to interrupt at any point, because the original data stays intact until a byte-level verification passes. After it completes, the application's future cache growth lands on the destination drive rather than the system drive.",
+      "totalTime": "PT25M",
       "tool": [
         { "@type": "HowToTool", "name": "PowerShell 5.1 or later" },
         { "@type": "HowToTool", "name": "robocopy (built into Windows)" },
@@ -90,7 +91,7 @@
           "@type": "HowToStep",
           "position": 5,
           "name": "Create the NTFS junction",
-          "text": "Run mklink /J from the original path to the new location. Applications open a junction as a real directory, so no application support is required."
+          "text": "Run mklink /J from the original path to the new location. A junction is a filesystem-level redirect, so the application keeps opening the same path it always did and its future cache growth lands on the destination drive instead of the system drive."
         },
         {
           "@type": "HowToStep",
@@ -106,26 +107,50 @@
       "mainEntity": [
         {
           "@type": "Question",
+          "name": "Will the space come back after I clean my C drive?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If you only delete, yes. Measured on one workstation 13 days after a cleanup, deleted-only locations regrew 11.25 GB on the system drive - 10.94 GB in %LOCALAPPDATA%\\Temp and 0.31 GB of NVIDIA DXCache - which is roughly 0.87 GB per day, so a delete-only cleanup is undone in about two weeks. Over the same 13 days the relocated applications produced 5.32 GB of new data and every byte of it landed on the destination drive, including 5.76 GB of new Feishu cache. Relocation is what makes the recovered space permanent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is this different from 360 Total Security, Tencent PC Manager, or CCleaner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Chinese PC suites do relocate software off C: using symbolic links, and that part works. Two things differ. First, what moves: they move installed software chosen from a vendor-maintained list, while this relocates any directory you name - including developer toolchain caches such as NuGet, npm, pip, Playwright, Cargo, Gradle and the Unreal Engine derived data cache, which are usually where the regrowth actually is. Second, what comes attached: this is an MIT-licensed script that runs and exits, with no background service, no advertising, no upsells, and uninstalling means deleting a folder. CCleaner and Windows Storage Sense only delete; Storage Sense additionally manages the system drive only, does not touch browser caches, skips app temp files from Teams, Spotify and Discord, and by default runs only once the disk is already nearly full."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to clean and relocate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The documented run took about 25 minutes end to end on a 299 GB system drive: a few minutes of scanning, then the deletions, then roughly 11 minutes to copy 29 GB across five relocations from SSD to SSD. It recovered 43.7 GB, taking free space from 19.0 GB to 62.7 GB. That is a one-time cost, and 13 days later the drive still had 61.4 GB free - compared with re-running a delete-only cleaner every two weeks indefinitely."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it move an application that is not on its supported list?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The relocation script takes any source and destination path, so there is no vendor list to wait on. The bundled application atlas documents which subdirectories are safe to delete for applications that have been verified firsthand, but the relocation machinery itself is generic and works on any directory on an NTFS volume."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Will cleaning app caches delete my chat history?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No, if you delete at the right granularity. In Chromium-based desktop apps the disposable items are Cache\\Cache_Data, Code Cache, GPUCache, the shader caches, and Service Worker\\CacheStorage. Login state lives in Local Storage, Cookies, and persistent storage databases, and application data lives in IndexedDB and Service Worker\\Database - deleting those logs you out or loses local drafts. Deleting the whole profile folder to clear a cache is the common mistake."
+            "text": "No, if you delete at the right granularity. In Chromium-based desktop apps the disposable items are Cache\\Cache_Data, Code Cache, GPUCache, the shader caches, and Service Worker\\CacheStorage. Login state lives in Local Storage, Cookies, and persistent storage databases, and application data lives in IndexedDB and Service Worker\\Database - deleting those logs you out or loses local drafts. Deleting the whole profile folder to clear a cache is the common mistake. For WeChat and WeCom this skill does not touch the data at all and points you at the app's own storage setting instead."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I move the Feishu or Lark cache to another drive?",
+          "name": "Are NTFS junctions safe for application data? Will apps break?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, but not through the client's settings. Feishu's Settings has only a File save location option, which controls the download directory rather than the cache. The data directory %APPDATA%\\LarkShell must be relocated with an NTFS junction. In a verified run this freed 10.6 GB and the client retained its login session, writing all new data to the target drive after restart."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does robocopy exit code 1 mean the copy failed?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. robocopy exit codes are a bit field, not a boolean. 0 means nothing needed copying, 1 means files were copied successfully, and 8 is the first code that indicates a real failure. Testing $? or $LASTEXITCODE -ne 0 in PowerShell will report a perfectly good copy as a failure. Test for $LASTEXITCODE -lt 8 instead."
+            "text": "A junction is a filesystem-level redirect resolved below the application layer, so applications open it as an ordinary directory and need no support for it. That is also why future writes follow it automatically. It requires NTFS on both sides and the same machine: do not point a junction at a network share, a non-NTFS volume, or a removable drive that may be absent at boot, and never junction a directory the operating system needs before all volumes mount."
           }
         },
         {
@@ -138,6 +163,14 @@
         },
         {
           "@type": "Question",
+          "name": "Does robocopy exit code 1 mean the copy failed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. robocopy exit codes are a bit field, not a boolean. 0 means nothing needed copying, 1 means files were copied successfully, and 8 is the first code that indicates a real failure. Testing $? or $LASTEXITCODE -ne 0 in PowerShell will report a perfectly good copy as a failure. Test for $LASTEXITCODE -lt 8 instead."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Why does my PowerShell script fail with null-reference errors on valid lines?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -146,26 +179,10 @@
         },
         {
           "@type": "Question",
-          "name": "Are NTFS junctions safe for application data?",
+          "name": "Why clean early instead of waiting until the disk is actually full?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, within limits. A junction is a filesystem-level redirect resolved below the application layer, so applications open it as an ordinary directory and need no support for it. It requires NTFS on both sides and the same machine: do not point a junction at a network share, a non-NTFS volume, or a removable drive that may be absent at boot, and never junction a directory the operating system needs before all volumes mount."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much space can this actually recover?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In the documented case study on a 299 GB system drive, a single session recovered 43.7 GB, taking free space from 19.0 GB to 62.7 GB. Roughly half was deleted regenerable cache and half was relocated to a second drive, so the relocated portion cannot grow back on C:. The largest individual items were 17.4 GB of AI agent session transcripts, 10.6 GB of chat client data, and 7.4 GB of abandoned installer unpack directories."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why does a full disk corrupt applications?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A Windows volume that reaches zero free bytes does not fail loudly; writes in progress fail partway. SQLite databases are especially vulnerable. In the incident behind this project, a full C: drive truncated Chrome's History database into an empty shell, and Chrome kept running without recording anything until it was restarted, so the loss was only noticed days later. This is why a nearly full disk should be treated as an active data-loss risk rather than a housekeeping chore."
+            "text": "A Windows volume that reaches zero free bytes does not fail loudly; writes in progress fail partway, and SQLite databases are especially vulnerable. In the incident behind this project, a full C: drive truncated Chrome's History database into an empty shell, and Chrome kept running without recording anything until it was restarted, so the loss was only noticed days later. Treat a nearly full disk as an active data-loss risk rather than a housekeeping chore."
           }
         }
       ]
@@ -177,21 +194,29 @@
 <style>
   :root {
     --bg: #ffffff; --fg: #1a1c1f; --muted: #5b6169; --line: #e3e6ea;
-    --accent: #1668c4; --code-bg: #f5f7f9; --card: #fafbfc; --warn-bg: #fff8e6; --warn-line: #e8c26a;
+    --accent: #1668c4; --code-bg: #f5f7f9; --card: #fafbfc;
+    --warn-bg: #fff8e6; --warn-line: #e8c26a;
+    --bad: #b4341f; --good: #12704a; --good-bg: #eef8f3; --bad-bg: #fdf1ef;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #0f1115; --fg: #e6e8eb; --muted: #9aa3ad; --line: #262b33;
-      --accent: #6fb4ff; --code-bg: #171a20; --card: #14171d; --warn-bg: #241f10; --warn-line: #6b5620;
+      --accent: #6fb4ff; --code-bg: #171a20; --card: #14171d;
+      --warn-bg: #241f10; --warn-line: #6b5620;
+      --bad: #ff9078; --good: #5fd3a3; --good-bg: #10201a; --bad-bg: #241512;
     }
   }
   :root[data-theme="light"] {
     --bg: #ffffff; --fg: #1a1c1f; --muted: #5b6169; --line: #e3e6ea;
-    --accent: #1668c4; --code-bg: #f5f7f9; --card: #fafbfc; --warn-bg: #fff8e6; --warn-line: #e8c26a;
+    --accent: #1668c4; --code-bg: #f5f7f9; --card: #fafbfc;
+    --warn-bg: #fff8e6; --warn-line: #e8c26a;
+    --bad: #b4341f; --good: #12704a; --good-bg: #eef8f3; --bad-bg: #fdf1ef;
   }
   :root[data-theme="dark"] {
     --bg: #0f1115; --fg: #e6e8eb; --muted: #9aa3ad; --line: #262b33;
-    --accent: #6fb4ff; --code-bg: #171a20; --card: #14171d; --warn-bg: #241f10; --warn-line: #6b5620;
+    --accent: #6fb4ff; --code-bg: #171a20; --card: #14171d;
+    --warn-bg: #241f10; --warn-line: #6b5620;
+    --bad: #ff9078; --good: #5fd3a3; --good-bg: #10201a; --bad-bg: #241512;
   }
 
   * { box-sizing: border-box; }
@@ -200,7 +225,7 @@
     font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Roboto, Helvetica, Arial, sans-serif;
     -webkit-text-size-adjust: 100%;
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   code, kbd { font-family: ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, monospace; font-size: .9em; }
@@ -212,8 +237,8 @@
   pre code { background: none; padding: 0; }
 
   header { border-bottom: 1px solid var(--line); padding: 56px 0 40px; }
-  h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.2; margin: 0 0 14px; letter-spacing: -.02em; }
-  .tagline { font-size: 1.15rem; color: var(--muted); margin: 0 0 26px; max-width: 62ch; }
+  h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.18; margin: 0 0 16px; letter-spacing: -.02em; }
+  .tagline { font-size: 1.13rem; color: var(--muted); margin: 0 0 26px; max-width: 64ch; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
   .btn {
     display: inline-block; padding: 9px 18px; border-radius: 7px;
@@ -225,10 +250,10 @@
   .btn-ghost:hover { text-decoration: none; background: var(--code-bg); }
 
   .stats { display: flex; flex-wrap: wrap; gap: 26px; padding: 20px 0 0; }
-  .stat strong { display: block; font-size: 1.7rem; line-height: 1.1; letter-spacing: -.02em; }
+  .stat strong { display: block; font-size: 1.65rem; line-height: 1.1; letter-spacing: -.02em; }
   .stat span { font-size: .85rem; color: var(--muted); }
 
-  section { padding: 40px 0; border-bottom: 1px solid var(--line); }
+  section { padding: 42px 0; border-bottom: 1px solid var(--line); }
   h2 { font-size: 1.5rem; margin: 0 0 8px; letter-spacing: -.01em; }
   h3 { font-size: 1.08rem; margin: 26px 0 6px; }
   .lede { color: var(--muted); margin: 0 0 20px; max-width: 68ch; }
@@ -237,6 +262,11 @@
   th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { font-weight: 600; color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
   .scroll { overflow-x: auto; }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.back td { background: var(--bad-bg); }
+  tr.stay td { background: var(--good-bg); }
+  .tag-back { color: var(--bad); font-weight: 700; }
+  .tag-stay { color: var(--good); font-weight: 700; }
 
   .note {
     background: var(--warn-bg); border-left: 3px solid var(--warn-line);
@@ -264,102 +294,148 @@
   ol.steps span { color: var(--muted); font-size: .94rem; }
 
   footer { padding: 32px 0 60px; color: var(--muted); font-size: .9rem; }
-  .lang { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <h1>Free up a full Windows C: drive without losing data</h1>
+    <h1>Free your C: drive — and keep it free</h1>
     <p class="tagline">
-      A Claude Code skill and standalone PowerShell toolkit. It measures what is
-      <em>actually</em> eating your system drive, deletes only regenerable caches from an
-      allowlist, and relocates everything else to another drive with NTFS junctions — so
-      the space stays recovered.
+      Cleaners delete, and the space comes back in about two weeks. This one relocates the
+      directories that actually regrow onto another drive with NTFS junctions, so the
+      application keeps writing to the same path and the bytes land somewhere else.
+      Open source, no ads, no background service.
     </p>
     <div class="cta">
       <a class="btn btn-primary" href="https://github.com/linad3d/windows-disk-cleanup-skill">View on GitHub</a>
-      <a class="btn btn-ghost" href="#install">Install</a>
-      <a class="btn btn-ghost" href="#faq">FAQ</a>
+      <a class="btn btn-ghost" href="#proof">The evidence</a>
+      <a class="btn btn-ghost" href="#compare">vs other cleaners</a>
       <a class="btn btn-ghost" href="#zh">中文</a>
     </div>
     <div class="stats">
-      <div class="stat"><strong>43.7 GB</strong><span>recovered in one verified run</span></div>
-      <div class="stat"><strong>0</strong><span>files of user data lost</span></div>
-      <div class="stat"><strong>30+</strong><span>applications mapped</span></div>
-      <div class="stat"><strong>MIT</strong><span>open source</span></div>
+      <div class="stat"><strong>0.87 GB/day</strong><span>rate a delete-only clean is undone</span></div>
+      <div class="stat"><strong>43.7 GB</strong><span>recovered in one 25-minute run</span></div>
+      <div class="stat"><strong>0 bytes</strong><span>of relocated growth returned to C:</span></div>
+      <div class="stat"><strong>MIT</strong><span>open source, no bundles</span></div>
     </div>
   </div>
 </header>
 
 <main>
 
-<section id="why">
+<section id="proof">
   <div class="wrap">
-    <h2>A full disk is a data-loss event, not a chore</h2>
+    <h2>Why deleting doesn't hold</h2>
     <p class="lede">
-      A Windows volume that reaches zero free bytes does not fail loudly — it silently
-      corrupts whatever was mid-write.
-    </p>
-    <div class="note">
-      <p>
-        In the incident this project was built from, a full C: drive truncated Chrome's
-        <code>History</code> SQLite database into an empty shell. Chrome kept running and
-        recorded nothing until it was restarted; the loss was discovered days later and the
-        pre-incident history was unrecoverable locally.
-      </p>
-    </div>
-    <p>
-      That is why this toolkit optimizes for <b>not destroying anything</b> first, and for
-      making the recovered space permanent second. Deletion is restricted to a hard-coded
-      allowlist of known-regenerable cache paths — it cannot be pointed at an arbitrary
-      directory. That is a structural property, not a policy you have to trust.
-    </p>
-  </div>
-</section>
-
-<section id="difference">
-  <div class="wrap">
-    <h2>The hard part is subdirectory granularity</h2>
-    <p class="lede">
-      Most guides say to empty <code>%TEMP%</code>. The real space — and the real risk — is
-      inside application data directories, where disposable cache sits next to your login
-      session.
+      One real workstation, measured 13 days after a cleanup. Same machine, same period —
+      the only difference is whether the location was deleted or relocated.
     </p>
     <div class="scroll">
       <table>
-        <thead><tr><th>Inside one Chromium app profile</th><th>Verdict</th><th>Why</th></tr></thead>
+        <thead>
+          <tr><th>What was done</th><th>At cleanup</th><th>13 days later</th><th>Where the growth landed</th></tr>
+        </thead>
         <tbody>
-          <tr><td><code>Service Worker\CacheStorage</code></td><td><b>Delete</b></td><td>Often &gt;1.5 GB per profile; refetched on demand</td></tr>
-          <tr><td><code>Service Worker\Database</code></td><td><b>Keep</b></td><td>Worker registrations; breaks offline features</td></tr>
-          <tr><td><code>Cache\Cache_Data</code>, <code>Code Cache</code>, <code>GPUCache</code></td><td><b>Delete</b></td><td>HTTP, bytecode and shader caches; rebuilt</td></tr>
-          <tr><td><code>Local Storage</code>, <code>Cookies</code></td><td><b>Keep</b></td><td>Login tokens — deleting logs the user out</td></tr>
-          <tr><td><code>IndexedDB</code></td><td><b>Keep</b></td><td>App state and local drafts</td></tr>
+          <tr class="back"><td><b>Deleted only</b> — <code>%LOCALAPPDATA%\Temp</code></td><td class="num">0 GB</td><td class="num"><b>10.94 GB</b></td><td class="tag-back">back on C:</td></tr>
+          <tr class="back"><td><b>Deleted only</b> — NVIDIA <code>DXCache</code></td><td class="num">0 GB</td><td class="num">0.31 GB</td><td class="tag-back">back on C:</td></tr>
+          <tr class="stay"><td><b>Relocated</b> — Feishu/Lark data</td><td class="num">3.69 GB</td><td class="num"><b>9.45 GB</b></td><td class="tag-stay">D: — 5.76 GB of new cache</td></tr>
+          <tr class="stay"><td><b>Relocated</b> — agent session transcripts</td><td class="num">16.18 GB</td><td class="num">16.19 GB</td><td class="tag-stay">D:</td></tr>
+          <tr class="stay"><td><b>Relocated</b> — NuGet + Playwright</td><td class="num">6.71 GB</td><td class="num">6.71 GB</td><td class="tag-stay">D:</td></tr>
         </tbody>
       </table>
     </div>
+    <div class="note">
+      <p>
+        <b>11.25 GB crawled back onto C: in 13 days — about 0.87 GB/day.</b> A delete-only
+        cleanup is undone in roughly two weeks. Over the same period the relocated set grew
+        5.32 GB net and <b>not one byte of it went to C:</b>.
+      </p>
+    </div>
     <p>
-      Deleting the parent folder to "clear the cache" is the common mistake. The project
-      ships a per-application atlas of exactly these distinctions, covering chat clients,
-      game engines, GPU drivers, developer toolchains, AI agents, and Windows itself.
+      That is the whole mechanism: a junction is a filesystem-level redirect, resolved
+      below the application layer. The app opens the same path it always did and never
+      learns that its data now lives on another volume — so its <em>future</em> growth
+      follows the link automatically.
     </p>
   </div>
 </section>
 
-<section id="howto">
+<section id="compare">
   <div class="wrap">
-    <h2>Relocation that is safe to interrupt</h2>
+    <h2>How it compares</h2>
     <p class="lede">
-      Anything a human created or accumulated gets <b>moved, never deleted</b> — and only
-      after a byte-level verification proves the copy is intact.
+      To be fair to them: the big Chinese PC suites <em>do</em> use symbolic links to move
+      installed software off C:, and that part works. The differences that matter are what
+      gets moved and what comes attached.
+    </p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th></th><th>360 / Tencent PC suites</th><th>CCleaner / Storage Sense</th><th>This skill</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>One-click junk cleanup</td><td>Yes</td><td>Yes</td><td>Yes — allowlist, <b>dry-run by default</b></td></tr>
+          <tr><td>Relocates with junctions</td><td>Yes</td><td>No</td><td>Yes</td></tr>
+          <tr><td><b>Who decides what moves</b></td><td><b>The vendor's software list</b></td><td>—</td><td><b>You do</b> — any directory or toolchain</td></tr>
+          <tr><td>Dev toolchain caches via env vars</td><td>No</td><td>No</td><td>NuGet, npm, pip, Playwright, Cargo, Gradle, UE DDC</td></tr>
+          <tr><td>Per-subdirectory safe/unsafe rules</td><td>No</td><td>No</td><td>30+ apps, extensible</td></tr>
+          <tr><td>Byte-level verify before deleting source</td><td>Not documented</td><td>N/A</td><td>Yes — mismatch aborts</td></tr>
+          <tr><td>Background service, ads, upsells</td><td>Yes</td><td>Some</td><td><b>None</b> — runs and exits</td></tr>
+          <tr><td>Uninstall</td><td>Uninstaller flow</td><td>Uninstaller flow</td><td><b>Delete a folder</b></td></tr>
+          <tr><td>Open source</td><td>No</td><td>No</td><td>MIT</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>You point it at anything</h3>
+    <p>There is no vendor list to wait on:</p>
+    <pre><code>.\Move-AppData.ps1 -Source "$env:APPDATA\SomeAppNobodySupports" -Destination "D:\AppData\SomeApp"</code></pre>
+    <p style="color:var(--muted);font-size:.92rem;">
+      For reference, Windows Storage Sense manages the system drive only, does not touch
+      browser caches, skips app temp files from Teams/Spotify/Discord, and by default runs
+      only once the disk is already nearly full.
+    </p>
+  </div>
+</section>
+
+<section id="time">
+  <div class="wrap">
+    <h2>What it costs you: about 25 minutes, once</h2>
+    <p class="lede">
+      A few minutes of scanning, the deletions, then roughly 11 minutes to copy 29 GB
+      across five relocations, SSD to SSD.
+    </p>
+    <p>
+      That run recovered <b>43.7 GB</b> on a 299 GB system drive — 19.0 GB free to 62.7 GB,
+      with zero data lost. Thirteen days later the drive was still at 61.4 GB free. The
+      alternative is re-running a delete-only cleaner every two weeks, indefinitely.
+    </p>
+  </div>
+</section>
+
+<section id="safety">
+  <div class="wrap">
+    <h2>Reclaiming space is easy if you don't mind losing things</h2>
+    <p class="lede">This is built the other way round.</p>
+    <ul>
+      <li><b>Deletion is allowlist-only.</b> It cannot be pointed at an arbitrary folder — structural, not a policy you have to trust.</li>
+      <li><b>Dry-run by default.</b> Nothing is removed until you pass <code>-Execute</code>.</li>
+      <li><b>Anything a human created or accumulated gets moved, never deleted.</b></li>
+      <li><b>Byte-level verification before any source is deleted.</b> Bytes <em>and</em> file counts are recounted independently on both sides; a mismatch aborts and restores the original.</li>
+    </ul>
+    <p>
+      The hard part isn't deleting — it's knowing which <em>subdirectory</em> is disposable.
+      In a Chromium-based app, <code>Service Worker\CacheStorage</code> is disposable and
+      often over 1.5 GB per profile, but its sibling <code>Service Worker\Database</code>
+      is not, and <code>Local Storage</code> holds your login token. Folder-level thinking
+      logs you out.
     </p>
     <ol class="steps">
       <li><b>Probe for locks</b><span>Rename the directory in place. Success means nothing holds a handle; failure means stop rather than force.</span></li>
-      <li><b>Copy</b><span><code>robocopy /E /COPY:DAT /DCOPY:DAT</code>. Remember exit codes below 8 are success.</span></li>
-      <li><b>Recount independently</b><span>Total bytes <em>and</em> file count on both sides must match exactly. Do not trust the copy tool's own summary.</span></li>
+      <li><b>Copy</b><span><code>robocopy /E /COPY:DAT /DCOPY:DAT</code>. Exit codes below 8 are success.</span></li>
+      <li><b>Recount independently</b><span>Total bytes <em>and</em> file count on both sides must match exactly. Do not trust the copy tool's summary.</span></li>
       <li><b>Delete the source</b><span>Only now. Until this step the original is fully intact, which is what makes the operation abandonable at any earlier moment.</span></li>
-      <li><b>Create the junction</b><span><code>mklink /J</code>. Applications open a junction as a real directory — no app support needed.</span></li>
+      <li><b>Create the junction</b><span><code>mklink /J</code>. From here, future writes follow the link automatically.</span></li>
       <li><b>Confirm live writes</b><span>Start the app and verify new files appear on the destination. A silently failed junction looks identical to a working one until you check.</span></li>
     </ol>
   </div>
@@ -389,36 +465,44 @@ Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:
   <div class="wrap">
     <h2>Frequently asked questions</h2>
 
+    <details class="faq" open><summary>Will the space come back?</summary>
+      <div>If you only delete, yes. Measured 13 days after a cleanup, deleted-only locations regrew <b>11.25 GB</b> on the system drive (10.94 GB of <code>%LOCALAPPDATA%\Temp</code> plus 0.31 GB of NVIDIA DXCache) — about 0.87 GB/day, so a delete-only cleanup is undone in roughly two weeks. Over the same period the relocated applications produced 5.32 GB of new data and <b>every byte landed on the destination drive</b>, including 5.76 GB of new Feishu cache.</div>
+    </details>
+
+    <details class="faq"><summary>How is this different from 360, Tencent PC Manager, or CCleaner?</summary>
+      <div>The Chinese PC suites do relocate software off C: with symbolic links, and that works. Two things differ. <b>What moves:</b> they move installed software from a vendor-maintained list; this relocates any directory you name, including developer toolchain caches (NuGet, npm, pip, Playwright, Cargo, Gradle, Unreal Engine DDC) where the regrowth usually is. <b>What comes attached:</b> this is an MIT-licensed script that runs and exits — no background service, no ads, no upsells, and uninstalling means deleting a folder. CCleaner and Storage Sense only delete.</div>
+    </details>
+
+    <details class="faq"><summary>How long does it take?</summary>
+      <div>About 25 minutes end to end in the documented run: a few minutes scanning, the deletions, then ~11 minutes copying 29 GB across five relocations. One-time. It recovered 43.7 GB (19.0 → 62.7 GB free on a 299 GB drive), and 13 days later the drive still had 61.4 GB free.</div>
+    </details>
+
+    <details class="faq"><summary>Can it move an app that isn't on the supported list?</summary>
+      <div>Yes. <code>Move-AppData.ps1</code> takes any source and destination — there is no vendor list to wait on. The bundled atlas documents which subdirectories are safe for apps verified firsthand; the relocation machinery itself is generic and works on any directory on an NTFS volume.</div>
+    </details>
+
     <details class="faq"><summary>Will cleaning app caches delete my chat history?</summary>
-      <div>No, if you delete at the right granularity. In Chromium-based desktop apps the disposable items are <code>Cache\Cache_Data</code>, <code>Code Cache</code>, <code>GPUCache</code>, the shader caches, and <code>Service Worker\CacheStorage</code>. Login state lives in <code>Local Storage</code>, <code>Cookies</code> and persistent storage databases; application data lives in <code>IndexedDB</code> and <code>Service Worker\Database</code>. Deleting the whole profile folder to clear a cache is the common mistake.</div>
+      <div>No, if you delete at the right granularity. The disposable items are <code>Cache\Cache_Data</code>, <code>Code Cache</code>, <code>GPUCache</code>, the shader caches, and <code>Service Worker\CacheStorage</code>. Login state lives in <code>Local Storage</code> and <code>Cookies</code>; app data lives in <code>IndexedDB</code> and <code>Service Worker\Database</code>. For WeChat and WeCom the skill does not touch the data at all — it points you at the app's own storage setting.</div>
     </details>
 
-    <details class="faq"><summary>Can I move the Feishu / Lark cache to another drive?</summary>
-      <div>Yes, but not through the client's settings. Feishu's Settings offers only a "File save location" option, which controls the download directory rather than the cache. The data directory <code>%APPDATA%\LarkShell</code> must be relocated with an NTFS junction. In a verified run this freed 10.6 GB; the client retained its login session and wrote all new data to the target drive after restart.</div>
-    </details>
-
-    <details class="faq"><summary>Does robocopy exit code 1 mean the copy failed?</summary>
-      <div>No. robocopy exit codes are a bit field, not a boolean. <code>0</code> means nothing needed copying, <code>1</code> means files were copied successfully, and <code>8</code> is the first code indicating a real failure. Testing <code>$?</code> or <code>$LASTEXITCODE -ne 0</code> reports a perfectly good copy as a failure — test <code>$LASTEXITCODE -lt 8</code>.</div>
+    <details class="faq"><summary>Are NTFS junctions safe? Will apps break?</summary>
+      <div>A junction is a filesystem-level redirect resolved below the application layer, so apps open it as an ordinary directory — which is also why future writes follow it automatically. It requires NTFS on both sides and the same machine: never point one at a network share, a non-NTFS volume, or a removable drive that may be absent at boot.</div>
     </details>
 
     <details class="faq"><summary>Is it safe to delete the Unreal Engine DerivedDataCache?</summary>
-      <div>Yes. Epic's documentation states DDC contents are disposable and regenerated from <code>.uasset</code> files. Relocating is still preferable, since deleting means recompiling shaders. UE 5.4+ uses Zen Store as the local DDC by default, so relocating <code>%LOCALAPPDATA%\UnrealEngine\Common</code> covers both in one move — stop <code>zenserver.exe</code> first.</div>
+      <div>Yes. Epic's documentation states DDC contents are disposable and regenerated from <code>.uasset</code> files. Relocating is still preferable, since deleting means recompiling shaders. UE 5.4+ uses Zen Store as the local DDC by default, so relocating <code>%LOCALAPPDATA%\UnrealEngine\Common</code> covers both — stop <code>zenserver.exe</code> first.</div>
+    </details>
+
+    <details class="faq"><summary>Does robocopy exit code 1 mean the copy failed?</summary>
+      <div>No. robocopy exit codes are a bit field: <code>0</code> means nothing needed copying, <code>1</code> means files were copied successfully, and <code>8</code> is the first code indicating a real failure. Test <code>$LASTEXITCODE -lt 8</code>, not <code>$?</code>.</div>
     </details>
 
     <details class="faq"><summary>Why does my PowerShell script fail with null-reference errors on valid lines?</summary>
-      <div>Windows PowerShell 5.1 reads a UTF-8 file without a byte order mark as ANSI. Non-ASCII characters in comments corrupt the byte stream and can swallow adjacent statements, so variables silently become <code>$null</code> and the script half-runs without erroring. Keep helper <code>.ps1</code> files pure ASCII, or save as UTF-8 with BOM.</div>
+      <div>Windows PowerShell 5.1 reads a UTF-8 file without a BOM as ANSI. Non-ASCII characters in comments corrupt the byte stream and can swallow adjacent statements, so variables silently become <code>$null</code> and the script half-runs without erroring. Keep helper <code>.ps1</code> files pure ASCII, or save as UTF-8 with BOM.</div>
     </details>
 
-    <details class="faq"><summary>Are NTFS junctions safe for application data?</summary>
-      <div>Yes, within limits. A junction is a filesystem-level redirect resolved below the application layer, so applications open it as an ordinary directory. It requires NTFS on both sides and the same machine: never point one at a network share, a non-NTFS volume, or a removable drive that may be absent at boot, and never junction a directory the OS needs before all volumes mount.</div>
-    </details>
-
-    <details class="faq"><summary>How much space can this actually recover?</summary>
-      <div>In the documented case study on a 299 GB system drive, a single session recovered <b>43.7 GB</b>, taking free space from 19.0 GB to 62.7 GB. Roughly half was deleted regenerable cache and half was relocated, so the relocated portion cannot grow back on C:. The largest items were 17.4 GB of AI agent session transcripts, 10.6 GB of chat client data, and 7.4 GB of abandoned installer unpack directories.</div>
-    </details>
-
-    <details class="faq"><summary>Why does a full disk corrupt applications?</summary>
-      <div>Writes in progress fail partway, and SQLite databases are especially vulnerable. In the incident behind this project, a full C: drive truncated Chrome's <code>History</code> database into an empty shell and Chrome kept running without recording anything until restarted. Treat a nearly full disk as an active data-loss risk.</div>
+    <details class="faq"><summary>Why clean early instead of waiting until the disk is full?</summary>
+      <div>Writes in progress fail partway, and SQLite databases are especially vulnerable. In the incident behind this project, a full C: drive truncated Chrome's <code>History</code> database into an empty shell and Chrome kept running without recording anything until restarted — the loss was found days later. Treat a nearly full disk as an active data-loss risk.</div>
     </details>
   </div>
 </section>
@@ -427,28 +511,29 @@ Copy-Item -Recurse windows-disk-cleanup-skill\skills\windows-disk-cleanup "$env:
   <div class="wrap">
     <h2>中文说明</h2>
     <p class="lede">
-      一个 Claude Code 技能 + 独立可用的 PowerShell 工具包：把爆满的 Windows C 盘救回来，
-      且不丢任何用户数据。
+      清理工具删完就长回来。这个把该映射的映射掉，所以不会。
     </p>
     <p>
-      Windows 分区写到零字节时不会体面地报错，<b>它会静默损坏当时正在写入的东西</b>。
-      催生这个项目的那次事故里，写满的 C 盘把 Chrome 的 <code>History</code> 库截断成空壳，
-      而 Chrome 不重启就一直不再记录历史，几天后才被发现。
+      一个 Claude Code 技能 + 独立可用的 PowerShell 工具包：先把爆满的 C 盘救回来，再用 NTFS
+      目录连接（junction）和环境变量，把那些<b>反复回涨</b>的目录搬到别的盘。应用还往原来的路径写，
+      字节落在别处。
     </p>
     <p>
-      所以它的第一目标是<b>不毁掉任何东西</b>：删除只在写死的白名单内进行，无法被指向任意目录；
-      默认干跑，不加 <code>-Execute</code> 什么都不删；凡是人创造或积累的东西一律搬移而非删除，
-      且删源之前必须通过字节级重新计数校验。
+      <b>实测（同一台机器，清理后第 13 天）：</b>只删没搬的地方回涨了 <b>11.25 GB</b> 到 C 盘
+      （<code>%LOCALAPPDATA%\Temp</code> 10.94 GB + NVIDIA DXCache 0.31 GB），约 0.87 GB/天——
+      也就是说，一次只删的清理大约两周就白干了。同期做了映射的那批新增 5.32 GB，
+      <b>没有一个字节进 C 盘</b>，其中光飞书就新增了 5.76 GB 缓存，全落在 D 盘。
     </p>
     <p>
-      真正难的不是清 <code>%TEMP%</code>，而是判断一个应用的<b>哪个子目录</b>可以扔——
-      比如 Chromium 系应用里 <code>Service Worker\CacheStorage</code> 能删（单 profile 常超
-      1.5 GB），但旁边的 <code>Service Worker\Database</code> 不能，<code>Local Storage</code>
-      里还存着登录令牌。按文件夹一刀切的结果就是把自己登出。项目附带一份逐应用的缓存图谱，
-      覆盖飞书、微信、企业微信、虚幻引擎、NVIDIA、各类包管理器与 Windows 自身。
+      <b>和 360 安全卫士 / QQ电脑管家比：</b>平心而论，它们的「C盘搬家」确实也是用符号链接实现的，
+      这部分没问题。区别在两点——<b>搬什么由谁决定</b>：它们搬的是厂商内置列表里的已安装软件，
+      而这个是<b>你指哪搬哪</b>，包括 NuGet、npm、pip、Playwright、Cargo、Gradle、虚幻引擎 DDC
+      这些真正在反复涨的开发者缓存；<b>以及附带了什么</b>：这是个 MIT 开源脚本，跑完就退出，
+      没有常驻后台、没有广告推广，卸载就是删个文件夹。
     </p>
     <p>
-      实测结果：299 GB 系统盘单次释放 <b>43.7 GB</b>（可用 19.0 GB → 62.7 GB），零数据丢失。
+      <b>要花多久：</b>那次完整跑下来约 25 分钟（扫描几分钟 + 删除 + 约 11 分钟复制 29 GB 完成
+      5 项迁移），释放 43.7 GB，零数据丢失。一次性投入。
     </p>
     <p>
       <a href="https://github.com/linad3d/windows-disk-cleanup-skill/blob/main/README.zh-CN.md">完整中文文档 →</a>

@@ -9,17 +9,31 @@ license: MIT
 Recover space on a full Windows system drive **without losing a single piece of user
 data**, and make the space stay recovered.
 
-## Why this matters more than it looks
+## Deleting is the easy half; the space comes back
 
-A Windows volume that runs to zero bytes does not fail loudly. It silently corrupts
-whatever was mid-write. In the incident this skill was built from, a full C: drive
-truncated Chrome's `History` SQLite database into an empty shell, and Chrome kept
-running without recording anything until it was restarted - the loss was discovered
-days later, and the pre-incident history was unrecoverable locally.
+A cleanup that only deletes is undone in about two weeks. Measured on one workstation
+13 days after a run:
 
-So: **clean early, and treat "the disk is nearly full" as an active data-loss risk,
-not a housekeeping chore.** It also means you should never let a cleanup itself be
-the thing that destroys data. Everything below is built around that.
+- Deleted-only locations regrew **11.25 GB** on C: (`%LOCALAPPDATA%\Temp` 10.94 GB,
+  NVIDIA `DXCache` 0.31 GB) - roughly **0.87 GB/day**.
+- Relocated applications produced **5.32 GB** of new data over the same period, and
+  **none of it landed on C:** - including 5.76 GB of new chat-client cache.
+
+That difference is the point of this skill. A junction is a filesystem-level redirect
+resolved below the application layer, so the app keeps opening the path it always
+used and never learns its data moved - which means its *future* growth follows the
+link automatically. **So wherever something is too valuable to delete or certain to
+regrow, relocate it rather than just clearing it.** Deleting alone means doing this
+again next month.
+
+The second reason to act, and to act early: a Windows volume that runs to zero bytes
+does not fail loudly. It silently corrupts whatever was mid-write. In the incident
+this skill was built from, a full C: drive truncated Chrome's `History` SQLite
+database into an empty shell, and Chrome kept running without recording anything
+until it was restarted - the loss was discovered days later, and the pre-incident
+history was unrecoverable locally. Treat "the disk is nearly full" as an active
+data-loss risk, not a housekeeping chore - and never let the cleanup itself be the
+thing that destroys data. Everything below is built around that.
 
 ## The one rule
 
